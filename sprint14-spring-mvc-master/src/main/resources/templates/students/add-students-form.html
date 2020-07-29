@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+    <title>Add Users To Marathon</title>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h3>Add Users To Marathon <span th:text="${marathon.id}"></span></h3>
+    <hr>
+
+    <form action="#" th:action="@{/students/{marathonId}/add/(marathonId=${marathon.id})}"
+          th:object="${marathon}" method="POST">
+
+        <div class="form-group blu-margin">
+            <label for="users" class="col-form-label col-form-label-lg">Add Students(multiple select): </label>
+            <select id="users" class="form-control" th:field="*{users}" multiple="multiple">
+                <option class="list-group-item list-group-item-info"
+                        th:each="user : ${users}"
+                        th:value="${user}"
+                        th:field="*{users}"
+                        th:if="${!marathon.getUsers().contains(user)}"
+                        th:text="${user.firstName + ' ' + user.lastName}">
+                </option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-info col-2">Add</button>
+
+    </form>
+
+    <hr>
+    <a th:href="@{/marathons}">Back to Marathons List</a>
+
+</div>
+</body>
+
+</html>

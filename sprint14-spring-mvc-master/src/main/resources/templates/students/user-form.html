@@ -1,0 +1,98 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+    <title>Save User</title>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h3>User Directory</h3>
+    <hr>
+
+    <p th:if="${user.id != null}" class="h4 mb-4" th:text="'Update Student with Id #' + ${user.id}"></p>
+    <p th:if="${user.id == null}" class="h4 mb-4">Create New Student</p>
+
+    <form action="#" th:action="@{/students/edit/save/}"
+          th:object="${user}" method="POST">
+
+        <input type="hidden" th:field="*{id}"/>
+        <input type="hidden" th:field="*{role}"/>
+
+        <div class="form-group row">
+            <label class="col-sm-1 col-form-label col-form-label-lg">Last Name: </label>
+            <div class="col-sm-10">
+                <input type="text" th:field="*{lastName}"
+                       class="form-control mb-4 col-4" placeholder="Last Name">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-1 col-form-label col-form-label-lg">First Name: </label>
+            <div class="col-sm-10">
+                <input type="text" th:field="*{firstName}"
+                       class="form-control mb-4 col-4" placeholder="First Name">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-1 col-form-label col-form-label-lg">Email: </label>
+            <div class="col-sm-10">
+                <input type="text" th:field="*{email}"
+                       class="form-control mb-4 col-4" placeholder="Email">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-1 col-form-label col-form-label-lg">Password: </label>
+            <div class="col-sm-10">
+                <input type="text" th:field="*{password}"
+                       class="form-control mb-4 col-4" placeholder="Password">
+            </div>
+        </div>
+
+        <div class="list-group">
+            <label class="col-sm-1 col-form-label col-form-label-lg">Marathons: </label>
+            <div class="row" th:each="marathon : *{marathons}">
+                <div class="col">
+                    <a
+                            th:href="@{/marathons/edit/{marathonId}/(marathonId=${marathon.id})}"
+                            class="list-group-item list-group-item-primary"
+                            th:text="${marathon.title}">
+                    </a>
+                </div>
+                <div class="col">
+                    <a th:href="@{/students/remove/{student_id}/{marathon_id}(student_id=${user.id}, marathon_id=${marathon.id})}"
+                       class="btn btn-danger btn-sm"
+                       onclick="if (!(confirm('Are you sure you want to remove student from this marathon?'))) return false">
+                        Remove from marathon
+                    </a>
+                </div>
+            </div>
+
+            <a th:href="@{/students/{userId}/addMarathons/(userId=${user.id})}"
+               class="btn btn-info btn-sm">
+                Add Marathons to user
+            </a>
+        </div>
+
+        <button type="submit" class="btn btn-info col-2">Save</button>
+    </form>
+
+    <hr>
+    <a th:href="@{/students}">Back to Student List</a>
+
+</div>
+</body>
+
+</html>

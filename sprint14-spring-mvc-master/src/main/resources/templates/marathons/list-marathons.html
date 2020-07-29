@@ -1,0 +1,110 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+    <title>Marathon List Directory</title>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h3>Marathon List Directory</h3>
+    <hr>
+
+    <a th:href="@{/marathons/closed/}"
+       class="btn btn-dark btn-sm">
+        Closed Marathons
+    </a>
+
+
+    <table class="table table-bordered table-striped">
+        <thead class="thead-dark">
+        <tr>
+            <th>Title</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="tempMarathon : ${marathons}"
+            th:if="${((showClosed && tempMarathon.isClosed()) || (!showClosed && !tempMarathon.isClosed())) && (user == null ||
+            (user != null && tempMarathon.getUsers().contains(user)))}">
+
+            <td th:text="${tempMarathon.title}"></td>
+
+            <td>
+                <a th:href="@{/marathons/edit/{marathonId}/(marathonId=${tempMarathon.id})}"
+                   class="btn btn-info btn-sm">
+                    Edit
+                </a>
+
+                <a th:href="@{/marathons/close/{marathonId}/(marathonId=${tempMarathon.id})}"
+                   th:if="${!showClosed}"
+                   class="btn btn-warning btn-sm"
+                   onclick="if (!(confirm('Are you sure you want to close this marathon?'))) return false">
+                    Close
+                </a>
+
+                <a th:href="@{/marathons/open/{marathonId}/(marathonId=${tempMarathon.id})}"
+                   th:if="${showClosed}"
+                   class="btn btn-warning btn-sm"
+                   onclick="if (!(confirm('Re-open this marathon?'))) return false">
+                    Re-open
+                </a>
+
+                <a th:href="@{/marathons/view/{marathonId}/(marathonId=${tempMarathon.id})}"
+                   class="btn btn-primary btn-sm">
+                    View Marathon
+                </a>
+
+                <a th:href="@{/students/{marathonId}/(marathonId=${tempMarathon.id})}"
+                   th:if="${!showClosed}"
+                   class="btn btn-primary btn-sm">
+                    View Students for this marathon
+                </a>
+
+                <a th:each="tempSprint : ${tempMarathon.getSprints()}"
+                   th:href="@{/sprints/{sprintId}/(sprintId=${tempSprint.id})}"
+                   class="btn btn-secondary btn-sm"
+                   th:text="${tempSprint.title}">
+                </a>
+
+                <a th:href="@{/marathons/delete/{marathonId}/(marathonId=${tempMarathon.id})}"
+                   class="btn btn-danger btn-sm"
+                   onclick="if (!(confirm('Are you sure you want to delete this marathon? All sprints(and their tasks) from this marathon will be deleted as well.'))) return false">
+                    Delete (WARNING: Will delete all sprints and tasks of this marathon as well)
+                </a>
+
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <a th:href="@{/marathons/add}"
+       class="btn btn-success btn-sm">
+        Create new marathon
+    </a>
+
+    <a th:href="@{/students/}"
+       class="btn btn-info btn-sm">
+        View Students
+    </a>
+
+    <a th:href="@{/marathons/}"
+       class="btn btn-info btn-sm">
+        View Marathons
+    </a>
+</div>
+
+</body>
+</html>
+
+
+

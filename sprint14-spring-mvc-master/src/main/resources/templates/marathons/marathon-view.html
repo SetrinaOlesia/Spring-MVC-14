@@ -1,0 +1,77 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+    <title>View User</title>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h3>Marathon #<span th:text="${marathon.id}"></span></h3>
+    <hr>
+
+    <form action="#" th:object="${marathon}">
+
+        <div class="form-group row">
+            <label class="col-sm-1 col-form-label col-form-label-lg">Id: </label>
+            <div class="col-sm-10">
+                <p th:field="*{id}"
+                   th:text="*{id}"
+                   class="form-control mb-4 col-4">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-1 col-form-label col-form-label-lg">Title: </label>
+            <div class="col-sm-10">
+                <p th:text="*{title}" th:field="*{title}"
+                   class="form-control mb-4 col-4">
+            </div>
+        </div>
+
+        <div class="list-group">
+            <label class="col-sm-1 col-form-label col-form-label-lg">Students: </label>
+            <a th:each="student : ${marathon.users}"
+               th:href="@{/students/{marathonId}/edit/{studentId}/(marathonId=${marathon.id},studentId=${student.id})}"
+               class="list-group-item list-group-item-primary"
+               th:if="${student.getRole().toString() == 'TRAINEE'}"
+               th:text="${student.firstName + ' ' + student.lastName}">
+            </a>
+
+            <a th:href="@{/students/{marathonId}/add/(marathonId=${marathon.id})}"
+               class="btn btn-info btn-sm">
+                Add New Student
+            </a>
+        </div>
+
+        <div class="list-group">
+            <label class="col-sm-1 col-form-label col-form-label-lg">Sprints: </label>
+            <a th:each="tempSprint : ${marathon.getSprints()}"
+               th:href="@{/sprints/{sprintId}/(sprintId=${tempSprint.id})}"
+               class="list-group-item list-group-item-primary"
+               th:text="${tempSprint.title}">
+            </a>
+
+            <a th:href="@{/sprints/{marathonId}/add/(marathonId=${marathon.id})}"
+               class="btn btn-info btn-sm" th:disabled="disabled">
+                Add New Sprint
+            </a>
+        </div>
+
+    </form>
+
+    <hr>
+    <a th:href="@{/marathons}">Back to Marathon List</a>
+
+</div>
+</body>
+
+</html>
